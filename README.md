@@ -76,6 +76,10 @@ kubectl apply -f apmtest-python-deploy.yaml
 
 - **Node.js App:** [http://localhost:8000/](http://localhost:8000/)  
 - **Python App:** [http://localhost:8001/](http://localhost:8001/)
+- **Do some test calls:** 
+```bash
+for i in {1..10000}; do curl http://localhost:8000/; curl http://localhost:8001/; sleep 1; done
+```
 
 ---
 
