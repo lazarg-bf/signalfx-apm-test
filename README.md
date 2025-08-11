@@ -99,7 +99,7 @@ kubectl logs <pod-name>
 ---
 
 ## 6. Check signalfx AP
-If traces are sent OK, you should find
+If traces are sent OK, you should find<br>
 **apmtest-nodejs** & **apmtest-python**<br>
 in<br>
 https://dev.signalfx.com/#/apm<br>
