@@ -95,3 +95,14 @@ Logs can be viewed with:
 ```bash
 kubectl logs <pod-name>
 ```
+
+---
+
+## 6. Check signalfx AP
+If traces are sent OK, you should find
+**apmtest-nodejs** & **apmtest-python**<br>
+in<br>
+https://dev.signalfx.com/#/apm<br>
+filtering by Environment **Dev**
+
+
