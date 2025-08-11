@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: splunk-otel
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splunk-otel-collector
+  namespace: splunk-otel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splunk-otel-collector
+  template:
+    metadata:
+      labels:
+        app: splunk-otel-collector
+    spec:
+      containers:
+        - name: otel-collector
+          image: quay.io/signalfx/splunk-otel-collector:latest
+          ports:
+            - containerPort: 4317
+              name: otlp-grpc
+            - containerPort: 4318
+              name: otlp-http
+          env:
+            - name: SPLUNK_ACCESS_TOKEN
+              value: "<ADD-YOURS>"
+            - name: SPLUNK_REALM
+              value: "eu0"
+            - name: SPLUNK_METRICS_ENABLED
+              value: "true"
+            - name: SPLUNK_TRACE_ENABLED
+              value: "true"
+            - name: SPLUNK_LOGS_ENABLED
+              value: "false"
+            - name: SPLUNK_HEC_TOKEN
+              value: "<ADD-YOURS>"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: splunk-otel-collector
+  namespace: splunk-otel
+spec:
+  selector:
+    app: splunk-otel-collector
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+

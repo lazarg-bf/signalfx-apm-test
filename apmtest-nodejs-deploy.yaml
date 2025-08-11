@@ -1,0 +1,96 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apmtest-nodejs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apmtest-nodejs
+  namespace: apmtest-nodejs
+  labels:
+    app.kubernetes.io/name: apmtest-nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: apmtest-nodejs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: apmtest-nodejs
+      annotations:
+        # If you scrape with Prometheus, keep these; otherwise you can delete them.
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: apmtest-nodejs
+          image: apmtest-nodejs:latest
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: false
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: apmtest-nodejs
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://splunk-otel-collector.splunk-otel.svc:4317
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: deployment.environment=dev,service.version=1.0.0
+            - name: SPLUNK_PROFILER_ENABLED
+              value: "true"
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: grpc
+          resources:
+            requests: { cpu: "200m", memory: "256Mi" }
+            limits:   { cpu: "200m", memory: "256Mi" }
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 20; kill -TERM 1; sleep 30;"]
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apmtest-nodejs
+  namespace: apmtest-nodejs
+  labels:
+    app.kubernetes.io/name: apmtest-nodejs
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: apmtest-nodejs
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8080
+      protocol: TCP
+
+
