@@ -28,17 +28,19 @@ spec:
               name: otlp-http
           env:
             - name: SPLUNK_ACCESS_TOKEN
-              value: "<ADD-YOURS>"
+              value: "" #change 
             - name: SPLUNK_REALM
-              value: "eu0"
+              value: "" #change
             - name: SPLUNK_METRICS_ENABLED
               value: "true"
             - name: SPLUNK_TRACE_ENABLED
               value: "true"
             - name: SPLUNK_LOGS_ENABLED
-              value: "false"
+              value: "true"
             - name: SPLUNK_HEC_TOKEN
-              value: "<ADD-YOURS>"
+              value: "" #change
+            - name: SPLUNK_HEC_URL
+              value: "https://http-inputs-<SPLUNKCLOUDFIX>.splunkcloud.com/services/collector"
 ---
 apiVersion: v1
 kind: Service
@@ -55,4 +57,3 @@ spec:
     - name: otlp-http
       port: 4318
       targetPort: 4318
-
