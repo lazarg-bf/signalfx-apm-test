@@ -5,4 +5,4 @@ requests
 psutil
 numpy
 confluent-kafka
-splunk-opentelemetry
+splunk-opentelemetry[all]
