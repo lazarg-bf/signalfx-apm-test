@@ -1,6 +1,6 @@
 # Kubernetes + Splunk OpenTelemetry Example
 
-This guide demonstrates how to run Node.js and Python sample applications on Kubernetes (via Docker Desktop) with Splunk OpenTelemetry instrumentation.
+this guide demonstrates how to run Node.js and Python sample applications on Kubernetes (via Docker Desktop) with Splunk OpenTelemetry instrumentation.
 
 ## Prerequisites
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) with Kubernetes enabled
