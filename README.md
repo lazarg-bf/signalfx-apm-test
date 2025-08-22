@@ -52,12 +52,10 @@ kubectl apply -f splunk-otel-deploy.yaml
 # Build Node.js app image
 cd nodejs-app
 docker build -t apmtest-nodejs:latest .
-
+cd ../
 # Build Python app image
-cd ../python-app
+cd python-app
 docker build -t apmtest-python:latest .
-
-# Return to project root
 cd ../
 ```
 
