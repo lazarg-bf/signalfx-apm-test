@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN adduser --uid 1000 uki
 
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN opentelemetry-bootstrap -a install
 
 COPY --chown=uki python_app.py /python_app/app.py
 COPY --chown=uki templates /python_app/templates
